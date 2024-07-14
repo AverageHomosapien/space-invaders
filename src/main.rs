@@ -10,13 +10,18 @@ use crate::piston::EventLoop;
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent, ButtonArgs, ButtonEvent, Button, ButtonState, Key};
 use piston::window::WindowSettings;
-use rand::Rng;
+//use rand::Rng;
+//use crate::sprites;
+
+pub mod sprites;
+
+const game_scale: u32 = 5;
 
 enum Direction {
     Left, Right
 }
 
-pub struct Segment {
+pub struct Coordinate {
     x: i32,
     y: i32,
 }
@@ -26,14 +31,14 @@ pub struct App {
     score: u32,
     direction: Direction,
     gameover: bool,
-    enemies: Vec<Vec<Segment>>,
+    enemies: Vec<Vec<Coordinate>>,
 }
 
 impl App {
     fn render(&mut self, args: &RenderArgs){
         use graphics::*;
 
-        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];i
+        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
         self.gl.draw(args.viewport(), |c, gl|{
@@ -59,12 +64,15 @@ fn main(){
         .build()
         .unwrap();
 
+    let starting_location: Coordinate = {x:0, y:0};
+    let enemy = BasicEnemy::new(game_scale);
+
     let mut app = App {
         gl: GlGraphics::new(open_gl),
         score: 0,
         direction: Direction::Right,
         gameover: false,
-        enemies: vec![create_enemy_segments(0,0)],
+        enemies: vec![enemy.get_screen_segments(starting_location)],
     };
 
     let event_settings = EventSettings::new().ups(15);
@@ -90,8 +98,4 @@ fn round_to_nearest_10(n: i32) -> i32{
         return b;
     }
     return a;
-}
-
-fn create_enemy_segments(position_x: i32, position_y: i32) -> Vec<Segment> {
-    vec![Segment{x:0 + position_x, y:0}, Segment {x: 10 + position_x, y:10}, Segment {x:20 + position_x, y:0}]
 }
