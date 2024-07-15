@@ -1,1 +1,1 @@
-pub mod standard_enemy;
+pub mod enemies;

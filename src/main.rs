@@ -12,18 +12,16 @@ use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent, ButtonArgs
 use piston::window::WindowSettings;
 //use rand::Rng;
 //use crate::sprites;
+use crate::game_objects::coordinate::Coordinate;
+use crate::sprites::enemies::{BasicEnemy, Enemy};
 
+pub mod game_objects;
 pub mod sprites;
 
-const game_scale: u32 = 5;
+const game_scale: u32 = 10;
 
 enum Direction {
     Left, Right
-}
-
-pub struct Coordinate {
-    x: i32,
-    y: i32,
 }
 
 pub struct App {
@@ -44,9 +42,11 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl|{
             clear(BLACK, gl);
             let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
-            for i in &self.enemies[0] {
-                let printable_segment = rectangle::square(i.x as f64, i.y as f64, 10.0);
-                rectangle(WHITE, printable_segment, transform, gl);
+            for enemy in &self.enemies {
+                for pixel in enemy {
+                    let printable_segment = rectangle::square(pixel.y as f64, pixel.x as f64, 10.0);
+                    rectangle(WHITE, printable_segment, transform, gl);
+                }
             }
         });
     }
@@ -64,15 +64,20 @@ fn main(){
         .build()
         .unwrap();
 
-    let starting_location: Coordinate = {x:0, y:0};
-    let enemy = BasicEnemy::new(game_scale);
+    let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(0, 130), Coordinate::new(0, 260), Coordinate::new(0, 390)];
+    let basic_enemy = BasicEnemy { game_scale: game_scale };
+    let mut enemies: Vec<Vec<Coordinate>> = vec![vec![]];
+
+    for coord in enemy_starting_coords {
+        enemies.push(basic_enemy.get_screen_segments(coord));
+    }
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
         score: 0,
         direction: Direction::Right,
         gameover: false,
-        enemies: vec![enemy.get_screen_segments(starting_location)],
+        enemies: enemies,
     };
 
     let event_settings = EventSettings::new().ups(15);
@@ -91,9 +96,9 @@ fn main(){
     }
 }
 
-fn round_to_nearest_10(n: i32) -> i32{
-    let a = (n/10) * 10 as i32;
-    let b = a + 10;
+fn round_to_game_scale(n: u32) -> u32{
+    let a = (n/game_scale) * game_scale as u32;
+    let b = a + game_scale;
     if n - a > b - n {
         return b;
     }
