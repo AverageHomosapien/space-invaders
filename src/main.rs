@@ -14,6 +14,8 @@ use piston::window::WindowSettings;
 //use crate::sprites;
 use crate::game_objects::coordinate::Coordinate;
 use crate::sprites::enemies::{BasicEnemy, Enemy};
+use graphics::*;
+use crate::game_objects::colors::{WHITE, BLACK};
 
 pub mod game_objects;
 pub mod sprites;
@@ -34,11 +36,6 @@ pub struct App {
 
 impl App {
     fn render(&mut self, args: &RenderArgs){
-        use graphics::*;
-
-        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
-        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
-
         self.gl.draw(args.viewport(), |c, gl|{
             clear(BLACK, gl);
             let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
@@ -50,11 +47,22 @@ impl App {
             }
         });
     }
+
+    fn update(&mut self, args: &UpdateArgs) {
+        self.score += 1;
+        if self.score % 1 == 0 {
+            for i in 0..self.enemies.len() {
+                for n in 0..self.enemies[i].len() {
+                    self.enemies[i][n].y += 1;
+                }
+            }
+        }
+    }
 }
 
 fn main(){
     let open_gl = OpenGL::V3_2;
-    let window_x: u32 = 500;
+    let window_x: u32 = 700;
     let window_y: u32 = 500;
 
     let mut window: Window = WindowSettings::new("Space Invaders", [window_x, window_y])
@@ -82,17 +90,22 @@ fn main(){
 
     let event_settings = EventSettings::new().ups(15);
     let mut events = Events::new(event_settings);
-    while let Some(e) = events.next(&mut window){
+    while let Some(e) = events.next(&mut window) {
+
+        // Render loop
         if let Some(args) = e.render_args(){
             app.render(&args);
         }
 
+        // Run the update loop
         if let Some(args) = e.update_args(){
+            app.update(&args);
         }
-        //if let app.gameover {
-        //    println!("Game over buster. Your score is: {}", app.score);
-        //    return;
-        //}
+
+        if app.gameover {
+            println!("Game over buster. Your score is: {}", app.score);
+            return;
+        }
     }
 }
 
