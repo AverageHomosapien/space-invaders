@@ -5,7 +5,7 @@ pub trait Enemy {
 }
 
 pub struct BasicEnemy {
-    pub game_scale: u32,
+    pub game_scale: i32,
 }
 
 impl Enemy for BasicEnemy{
