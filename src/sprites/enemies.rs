@@ -1,6 +1,6 @@
 use crate::game_objects::coordinate::Coordinate;
 
-pub trait Enemy {
+pub trait Sprite {
     fn get_screen_segments(&self, location: Coordinate) -> Vec<Coordinate>;
 }
 
@@ -8,7 +8,7 @@ pub struct BasicEnemy {
     pub game_scale: i32,
 }
 
-impl Enemy for BasicEnemy{
+impl Sprite for BasicEnemy{
     fn get_screen_segments(&self,  location: Coordinate) -> Vec<Coordinate> {
         vec![Coordinate::new(0 + location.x, self.game_scale * 2 + location.y), Coordinate::new(0 + location.x, self.game_scale * 8 + location.y),
              Coordinate::new(self.game_scale * 1 + location.x, self.game_scale * 3 + location.y), Coordinate::new(self.game_scale * 1 + location.x, self.game_scale * 7 + location.y),
