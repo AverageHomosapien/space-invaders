@@ -13,16 +13,19 @@ use piston::window::WindowSettings;
 //use rand::Rng;
 //use crate::sprites;
 use crate::game_objects::{coordinate::Coordinate, direction::Direction};
-use crate::sprites::enemies::{BasicEnemy, Enemy};
+use crate::sprites::enemies::BasicEnemy;
+use crate::sprites::player::Player;
+use crate::sprites::sprites::Sprite;
 use graphics::*;
 use crate::game_objects::colors::{WHITE, BLACK};
+use crate::sprites::sprite_factory::{ SpriteFactory, EnemyFactory } ;
 
 pub mod game_objects;
 pub mod sprites;
 
-const game_scale: i32 = 10;
-const window_x: u32 = 700;
-const window_y: u32 = 500;
+const GAME_SCALE: i32 = 10;
+const WINDOW_X: u32 = 700;
+const WINDOW_Y: u32 = 500;
 
 
 pub struct App {
@@ -30,7 +33,7 @@ pub struct App {
     score: i32,
     direction: Direction,
     gameover: bool,
-    enemies: Vec<Vec<Coordinate>>,
+    enemies: Vec<BasicEnemy>,
 }
 
 impl App {
@@ -39,8 +42,8 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl|{
             clear(BLACK, gl);
             let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
-            for enemy in &self.enemies {
-                for pixel in enemy {
+            for coord in &self.enemies.current_location {
+                for pixel in coord {
                     let printable_segment = rectangle::square(pixel.y as f64, pixel.x as f64, 10.0);
                     rectangle(WHITE, printable_segment, transform, gl);
                 }
@@ -52,26 +55,20 @@ impl App {
         self.score += 1;
         if self.score % 2 == 0 {
 
-            if self.enemies.iter().flatten().any(|elem| elem.y >= (window_x as i32) - 10){
-                self.direction = Direction::Left;
-                for i in 0..self.enemies.len() {
-                    for n in 0..self.enemies[i].len() {
-                        self.enemies[i][n].x += 5;
-                    }
-                }
-            }
-            if self.enemies.iter().flatten().any(|elem| (elem.y <= 0)){
+            if self.direction = Diction::Left && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X) == Direction::Right) {
                 self.direction = Direction::Right;
-                for i in 0..self.enemies.len() {
-                    for n in 0..self.enemies[i].len() {
-                        self.enemies[i][n].x += 5;
-                    }
-                }
+            }
+            else if self.direction = Diction::Right && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge() == Direction::Left) {
+                self.direction = Direction::Left;
             }
 
             for i in 0..self.enemies.len() {
-                for n in 0..self.enemies[i].len() {
-                    self.enemies[i][n].y += (self.direction as i32) * 5;
+                self.enemies[i].move_object(self.direction);
+            }
+
+            for i in 0..self.enemies.len() {
+                for n in 0..self.enemies[i].current_location.len() {
+                    self.enemies.current_location[i][n].y += (self.direction as i32) * 5;
                 }
             }
         }
@@ -89,12 +86,9 @@ fn main(){
         .unwrap();
 
     let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(0, 130), Coordinate::new(0, 260), Coordinate::new(0, 390)];
-    let basic_enemy = BasicEnemy { game_scale: game_scale };
-    let mut enemies: Vec<Vec<Coordinate>> = vec![vec![]];
 
-    for coord in enemy_starting_coords {
-        enemies.push(basic_enemy.get_screen_segments(coord));
-    }
+    let mut spriteFactory = SpriteFactory { game_scale: game_scale };
+    let enemies = spriteFactory.get_basic_enemies(enemy_starting_coords);
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
