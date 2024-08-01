@@ -14,13 +14,13 @@ pub trait EnemyFactory {
 
 impl EnemyFactory for SpriteFactory {
     fn get_basic_enemy(&self, coordinate: Coordinate) -> BasicEnemy {
-        BasicEnemy { game_scale: self.game_scale, current_location: coordinate }
+        BasicEnemy::new(self.game_scale,  coordinate)
     }
 
     fn get_basic_enemies(&self, coordinates:Vec<Coordinate>) -> Vec<BasicEnemy> {
         let mut enemies: Vec<BasicEnemy> = vec![];
         for coord in coordinates {
-            enemies.push(BasicEnemy { game_scale: self.game_scale, current_location: coord });
+            enemies.push(BasicEnemy::new(self.game_scale, coord));
         }
         return enemies;
     }
@@ -32,6 +32,6 @@ pub trait PlayerFactory {
 
 impl PlayerFactory for SpriteFactory {
     fn get_player(&self, location:Coordinate) -> Player {
-        Player { game_scale: self.game_scale, current_location: location }
+        Player::new(self.game_scale,  location)
     }
 }

@@ -12,7 +12,7 @@ use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent, ButtonArgs
 use piston::window::WindowSettings;
 //use rand::Rng;
 //use crate::sprites;
-use crate::game_objects::{coordinate::Coordinate, direction::Direction};
+use crate::game_objects::{coordinate::Coordinate, direction::{HorizontalDirection, VerticalDirection}};
 use crate::sprites::enemies::BasicEnemy;
 use crate::sprites::player::Player;
 use crate::sprites::sprites::Sprite;
@@ -31,7 +31,7 @@ const WINDOW_Y: u32 = 500;
 pub struct App {
     gl: GlGraphics,
     score: i32,
-    direction: Direction,
+    direction: HorizontalDirection,
     gameover: bool,
     enemies: Vec<BasicEnemy>,
 }
@@ -42,8 +42,8 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl|{
             clear(BLACK, gl);
             let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
-            for coord in &self.enemies.current_location {
-                for pixel in coord {
+            for enemy in &self.enemies {
+                for pixel in enemy.get_screen_segments() {
                     let printable_segment = rectangle::square(pixel.y as f64, pixel.x as f64, 10.0);
                     rectangle(WHITE, printable_segment, transform, gl);
                 }
@@ -55,22 +55,23 @@ impl App {
         self.score += 1;
         if self.score % 2 == 0 {
 
-            if self.direction = Diction::Left && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X) == Direction::Right) {
-                self.direction = Direction::Right;
+            if self.direction == HorizontalDirection::Left && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X as i32) == HorizontalDirection::Right) {
+                self.direction = HorizontalDirection::Right;
             }
-            else if self.direction = Diction::Right && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge() == Direction::Left) {
-                self.direction = Direction::Left;
+            else if self.direction == HorizontalDirection::Right && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X as i32) == HorizontalDirection::Left) {
+                self.direction = HorizontalDirection::Left;
             }
 
             for i in 0..self.enemies.len() {
                 self.enemies[i].move_object(self.direction);
             }
 
-            for i in 0..self.enemies.len() {
-                for n in 0..self.enemies[i].current_location.len() {
-                    self.enemies.current_location[i][n].y += (self.direction as i32) * 5;
-                }
-            }
+            //for i in 0..self.enemies.len() {
+            //    self.enemies[i
+            //    for n in 0..self.enemies[i].current_location.len() {
+            //        self.enemies[i].current_location[n].y += (self.direction as i32) * 5;
+            //    }
+            //}
         }
     }
 }
@@ -78,7 +79,7 @@ impl App {
 fn main(){
     let open_gl = OpenGL::V3_2;
 
-    let mut window: Window = WindowSettings::new("Space Invaders", [window_x, window_y])
+    let mut window: Window = WindowSettings::new("Space Invaders", [WINDOW_X, WINDOW_Y])
         .graphics_api(open_gl)
         .exit_on_esc(true)
         .resizable(false)
@@ -87,13 +88,13 @@ fn main(){
 
     let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(0, 130), Coordinate::new(0, 260), Coordinate::new(0, 390)];
 
-    let mut spriteFactory = SpriteFactory { game_scale: game_scale };
+    let spriteFactory = SpriteFactory { game_scale : GAME_SCALE };
     let enemies = spriteFactory.get_basic_enemies(enemy_starting_coords);
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
         score: 0,
-        direction: Direction::Right,
+        direction: HorizontalDirection::Right,
         gameover: false,
         enemies: enemies,
     };
@@ -120,8 +121,8 @@ fn main(){
 }
 
 fn round_to_game_scale(n: i32) -> i32{
-    let a = (n/game_scale) * game_scale as i32;
-    let b = a + game_scale;
+    let a = (n/GAME_SCALE) * GAME_SCALE as i32;
+    let b = a + GAME_SCALE;
     if n - a > b - n {
         return b;
     }

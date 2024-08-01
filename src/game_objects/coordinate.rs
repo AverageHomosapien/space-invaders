@@ -1,5 +1,6 @@
 //https://steveklabnik.com/writing/structure-literals-vs-constructors-in-rust
 // Interesting read about constructors
+[derive(Clone)]
 pub struct Coordinate {
     pub x: i32,
     pub y: i32,

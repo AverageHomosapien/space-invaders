@@ -1,8 +1,9 @@
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum HorizontalDirection {
     Left = -1, Neither = 0, Right = 1
 }
 
+#[derive(Copy, Clone, PartialEq)]
 pub enum VerticalDirection {
     Up = -1, Neither = 0, Down = 1
 }
