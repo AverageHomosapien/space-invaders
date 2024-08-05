@@ -9,42 +9,44 @@ pub struct BasicEnemy {
 }
 
 impl BasicEnemy {
-    pub fn new(game_scale: i32, current_location: Coordinate) -> BasicEnemy {
-        BasicEnemy { game_scale: game_scale, current_location: current_location,
-            screen_segments: 
-        vec![Coordinate::new(0 + self.current_location.x, self.game_scale * 2 + self.current_location.y), Coordinate::new(0 + self.current_location.x, self.game_scale * 8 + self.current_location.y),
-             Coordinate::new(self.game_scale * 1 + self.current_location.x, self.game_scale * 3 + self.current_location.y), Coordinate::new(self.game_scale * 1 + self.current_location.x, self.game_scale * 7 + self.current_location.y),
-             Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 2 + self.current_location.y),Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 3 + self.current_location.y), 
-                Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 4 + self.current_location.y), Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 5 + self.current_location.y),
-                Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 6 + self.current_location.y), Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 7 + self.current_location.y),
-                Coordinate::new(self.game_scale * 2 + self.current_location.x, self.game_scale * 8 + self.current_location.y),
-            Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 1 + self.current_location.y),Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 2 + self.current_location.y), 
-                Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 4 + self.current_location.y), Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 5 + self.current_location.y),
-                Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 6 + self.current_location.y), Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 8 + self.current_location.y),
-                Coordinate::new(self.game_scale * 3 + self.current_location.x, self.game_scale * 9 + self.current_location.y),
-            Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 0 + self.current_location.y), Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 1 + self.current_location.y),
-                Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 2 + self.current_location.y), Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 3 + self.current_location.y),
-                Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 4 + self.current_location.y), Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 5 + self.current_location.y),
-                Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 6 + self.current_location.y), 
-                Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 7 + self.current_location.y), Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 8 + self.current_location.y),
-                Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 9 + self.current_location.y), Coordinate::new(self.game_scale * 4 + self.current_location.x, self.game_scale * 10 + self.current_location.y),
-            Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 0 + self.current_location.y),
-                Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 2 + self.current_location.y), Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 3 + self.current_location.y),
-                Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 4 + self.current_location.y), Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 5 + self.current_location.y),
-                Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 6 + self.current_location.y), 
-                Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 7 + self.current_location.y), Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 8 + self.current_location.y),
-                Coordinate::new(self.game_scale * 5 + self.current_location.x, self.game_scale * 10 + self.current_location.y),
-            Coordinate::new(self.game_scale * 6 + self.current_location.x, self.game_scale * 0 + self.current_location.y), Coordinate::new(self.game_scale * 6 + self.current_location.x, self.game_scale * 2 + self.current_location.y), 
-                Coordinate::new(self.game_scale * 6 + self.current_location.x, self.game_scale * 8 + self.current_location.y), Coordinate::new(self.game_scale * 6 + self.current_location.x, self.game_scale * 10 + self.current_location.y),
-            Coordinate::new(self.game_scale * 7 + self.current_location.x, self.game_scale * 2 + self.current_location.y), Coordinate::new(self.game_scale * 7 + self.current_location.x, self.game_scale * 3 + self.current_location.y),
-                Coordinate::new(self.game_scale * 7 + self.current_location.x, self.game_scale * 7 + self.current_location.y), Coordinate::new(self.game_scale * 7 + self.current_location.x, self.game_scale * 8 + self.current_location.y)]
+    pub fn new(game_scale: i32, current_location: Coordinate) -> Self {
+        Self { game_scale: game_scale,
+               screen_segments: 
+        vec![Coordinate::new(game_scale * 2 + &current_location.x, 0 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, 0 + &current_location.y),
+             Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 1 + &current_location.y), Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 1 + &current_location.y),
+             Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 2 + &current_location.y),Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 2 + &current_location.y), 
+                Coordinate::new(game_scale * 4 + &current_location.x, game_scale * 2 + &current_location.y), Coordinate::new(game_scale * 5 + &current_location.x, game_scale * 2 + &current_location.y),
+                Coordinate::new(game_scale * 6 + &current_location.x, game_scale * 2 + &current_location.y), Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 2 + &current_location.y),
+                Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 2 + &current_location.y),
+            Coordinate::new(game_scale * 1 + &current_location.x, game_scale * 3 + &current_location.y),Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 3 + &current_location.y), 
+                Coordinate::new(game_scale * 4 + &current_location.x, game_scale * 3 + &current_location.y), Coordinate::new(game_scale * 5 + &current_location.x, game_scale * 3 + &current_location.y),
+                Coordinate::new(game_scale * 6 + &current_location.x, game_scale * 3 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 3 + &current_location.y),
+                Coordinate::new(game_scale * 9 + &current_location.x, game_scale * 3 + &current_location.y),
+            Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 1 + &current_location.x, game_scale * 4 + &current_location.y),
+                Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 4 + &current_location.y),
+                Coordinate::new(game_scale * 4 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 5 + &current_location.x, game_scale * 4 + &current_location.y),
+                Coordinate::new(game_scale * 6 + &current_location.x, game_scale * 4 + &current_location.y), 
+                Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 4 + &current_location.y),
+                Coordinate::new(game_scale * 9 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 10 + &current_location.x, game_scale * 4 + &current_location.y),
+            Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 5 + &current_location.y),
+                Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 5 + &current_location.y), Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 5 + &current_location.y),
+                Coordinate::new(game_scale * 4 + &current_location.x, game_scale * 5 + &current_location.y), Coordinate::new(game_scale * 5 + &current_location.x, game_scale * 5 + &current_location.y),
+                Coordinate::new(game_scale * 6 + &current_location.x, game_scale * 5 + &current_location.y), 
+                Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 5 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 5 + &current_location.y),
+                Coordinate::new(game_scale * 10 + &current_location.x, game_scale * 5 + &current_location.y),
+            Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 6 + &current_location.y), Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 6 + &current_location.y), 
+                Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 6 + &current_location.y), Coordinate::new(game_scale * 10 + &current_location.x, game_scale * 6 + &current_location.y),
+            Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 7 + &current_location.y), Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 7 + &current_location.y),
+                Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 7 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 7 + &current_location.y)],
+            current_location: current_location,
+
         }
     }
 }
 
 impl Sprite for BasicEnemy {
-    fn get_screen_segments(&self) -> Vec<Coordinate> {
-        screen_segments
+    fn get_screen_segments(&self) -> &Vec<Coordinate> {
+        &self.screen_segments
     }
 
     fn move_object(&mut self, direction: HorizontalDirection) {

@@ -27,7 +27,6 @@ const GAME_SCALE: i32 = 10;
 const WINDOW_X: u32 = 700;
 const WINDOW_Y: u32 = 500;
 
-
 pub struct App {
     gl: GlGraphics,
     score: i32,
@@ -37,6 +36,7 @@ pub struct App {
 }
 
 impl App {
+
     // All the draw logic exists in this loop
     fn render(&mut self, args: &RenderArgs){
         self.gl.draw(args.viewport(), |c, gl|{
@@ -44,7 +44,8 @@ impl App {
             let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
             for enemy in &self.enemies {
                 for pixel in enemy.get_screen_segments() {
-                    let printable_segment = rectangle::square(pixel.y as f64, pixel.x as f64, 10.0);
+                    let printable_segment = rectangle::square(pixel.x as f64, pixel.y as f64, 10.0);
+
                     rectangle(WHITE, printable_segment, transform, gl);
                 }
             }
@@ -86,10 +87,10 @@ fn main(){
         .build()
         .unwrap();
 
-    let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(0, 130), Coordinate::new(0, 260), Coordinate::new(0, 390)];
+    let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(130, 0), Coordinate::new(260, 0), Coordinate::new(390, 0)];
 
-    let spriteFactory = SpriteFactory { game_scale : GAME_SCALE };
-    let enemies = spriteFactory.get_basic_enemies(enemy_starting_coords);
+    let sprite_factory = SpriteFactory { game_scale : GAME_SCALE };
+    let enemies = sprite_factory.get_basic_enemies(enemy_starting_coords);
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
