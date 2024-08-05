@@ -12,12 +12,12 @@ impl Player {
     pub fn new(game_scale: i32, current_location: Coordinate) -> Self {
         Self { game_scale: game_scale,
                screen_segments:
-        vec![Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 1 + &current_location.y),
-                Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 2 + &current_location.y), Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 3 + &current_location.y),
-                Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 4 + &current_location.y), Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 5 + &current_location.y),
-                Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 6 + &current_location.y), 
-                Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 7 + &current_location.y), Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 8 + &current_location.y),
-                Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 9 + &current_location.y), Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 10 + &current_location.y)],
+        vec![Coordinate::new(game_scale * 0 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 1 + &current_location.x, game_scale * 0 + &current_location.y),
+                Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 0 + &current_location.y),
+                Coordinate::new(game_scale * 4 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 5 + &current_location.x, game_scale * 0 + &current_location.y),
+                Coordinate::new(game_scale * 6 + &current_location.x, game_scale * 0 + &current_location.y), 
+                Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 0 + &current_location.y),
+                Coordinate::new(game_scale * 9 + &current_location.x, game_scale * 0 + &current_location.y), Coordinate::new(game_scale * 10 + &current_location.x, game_scale * 0 + &current_location.y)],
             current_location: current_location,
         }
     }

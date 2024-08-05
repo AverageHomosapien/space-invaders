@@ -8,19 +8,19 @@ pub struct SpriteFactory {
 }
 
 pub trait EnemyFactory {
-    fn get_basic_enemy(&self, coordinate: Coordinate) -> BasicEnemy;
-    fn get_basic_enemies(&self, coordinates: Vec<Coordinate>) -> Vec<BasicEnemy>;
+    fn get_basic_enemy(&self, coordinate: Coordinate, maximum_window_x_size:u32) -> BasicEnemy;
+    fn get_basic_enemies(&self, coordinates: Vec<Coordinate>, maximum_window_x_size:u32) -> Vec<BasicEnemy>;
 }
 
 impl EnemyFactory for SpriteFactory {
-    fn get_basic_enemy(&self, coordinate: Coordinate) -> BasicEnemy {
-        BasicEnemy::new(self.game_scale,  coordinate)
+    fn get_basic_enemy(&self, coordinate: Coordinate, maximum_window_x_size:u32) -> BasicEnemy {
+        BasicEnemy::new(self.game_scale,  coordinate, maximum_window_x_size)
     }
 
-    fn get_basic_enemies(&self, coordinates:Vec<Coordinate>) -> Vec<BasicEnemy> {
+    fn get_basic_enemies(&self, coordinates:Vec<Coordinate>, maximum_window_x_size:u32) -> Vec<BasicEnemy> {
         let mut enemies: Vec<BasicEnemy> = vec![];
         for coord in coordinates {
-            enemies.push(BasicEnemy::new(self.game_scale, coord));
+            enemies.push(BasicEnemy::new(self.game_scale, coord, maximum_window_x_size));
         }
         return enemies;
     }

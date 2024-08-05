@@ -6,11 +6,13 @@ pub struct BasicEnemy {
     game_scale: i32,
     current_location: Coordinate,
     screen_segments: Vec<Coordinate>,
+    max_window_x_size: u32,
 }
 
 impl BasicEnemy {
-    pub fn new(game_scale: i32, current_location: Coordinate) -> Self {
+    pub fn new(game_scale: i32, current_location: Coordinate, max_window_x_size:u32) -> Self {
         Self { game_scale: game_scale,
+               max_window_x_size: max_window_x_size,
                screen_segments: 
         vec![Coordinate::new(game_scale * 2 + &current_location.x, 0 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, 0 + &current_location.y),
              Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 1 + &current_location.y), Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 1 + &current_location.y),
@@ -51,7 +53,11 @@ impl Sprite for BasicEnemy {
 
     fn move_object(&mut self, direction: HorizontalDirection) {
         for i in 0..self.screen_segments.len() {
-            self.screen_segments[i].x += (direction as i32) * 5;
+            self.screen_segments[i].x += HorizontalDirection::Right as i32 * 5;
+            if self.screen_segments[i].x >= self.max_window_x_size as i32 {
+                self.screen_segments[i].x = 0;
+                self.screen_segments[i].y += 20;
+            }
         }
     }
 

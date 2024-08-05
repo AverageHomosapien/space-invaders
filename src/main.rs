@@ -56,15 +56,8 @@ impl App {
         self.score += 1;
         if self.score % 2 == 0 {
 
-            if self.direction == HorizontalDirection::Left && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X as i32) == HorizontalDirection::Right) {
-                self.direction = HorizontalDirection::Right;
-            }
-            else if self.direction == HorizontalDirection::Right && self.enemies.iter().any(|enemy| enemy.touching_horizontal_screen_edge(WINDOW_X as i32) == HorizontalDirection::Left) {
-                self.direction = HorizontalDirection::Left;
-            }
-
             for i in 0..self.enemies.len() {
-                self.enemies[i].move_object(self.direction);
+                self.enemies[i].move_object(HorizontalDirection::Right);
             }
 
             //for i in 0..self.enemies.len() {
@@ -87,10 +80,10 @@ fn main(){
         .build()
         .unwrap();
 
-    let enemy_starting_coords = vec![Coordinate::new(0,0), Coordinate::new(130, 0), Coordinate::new(260, 0), Coordinate::new(390, 0)];
+    let enemy_starting_coords = vec![Coordinate::new(30,0), Coordinate::new(160, 0), Coordinate::new(290, 0), Coordinate::new(420, 0), Coordinate::new(550, 0)];
 
     let sprite_factory = SpriteFactory { game_scale : GAME_SCALE };
-    let enemies = sprite_factory.get_basic_enemies(enemy_starting_coords);
+    let enemies = sprite_factory.get_basic_enemies(enemy_starting_coords, WINDOW_X);
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
