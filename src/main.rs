@@ -10,16 +10,12 @@ use crate::piston::EventLoop;
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent, ButtonArgs, ButtonEvent, Button, ButtonState, Key};
 use piston::window::WindowSettings;
-//use rand::Rng;
-//use crate::sprites;
-use crate::game_objects::{coordinate::Coordinate, direction::{HorizontalDirection, VerticalDirection}};
-use crate::sprites::enemies::BasicEnemy;
-use crate::sprites::player::Player;
-use crate::sprites::sprites::Sprite;
 use graphics::*;
 use crate::game_objects::colors::{WHITE, BLACK};
-use crate::sprites::sprite_factory::{ SpriteFactory, EnemyFactory } ;
+use crate::sprites::sprite_factory::{ SpriteFactory, EnemyFactory, PlayerFactory } ;
 use crate::game_objects::game_state::GameState;
+use crate::game_controller::GameController;
+use crate::game_objects::coordinate::Coordinate;
 
 pub mod game_objects;
 pub mod sprites;
@@ -30,38 +26,18 @@ const WINDOW_Y: u32 = 700;
 
 pub struct App {
     gl: GlGraphics,
-    score: i32,
-    direction: HorizontalDirection,
-    game_state: GameState,
-    enemies: Vec<BasicEnemy>,
+    game_controller: GameController,
 }
 
 impl App {
-
     // Logic for rendering all objects on the screen. Called on each frame
     fn render(&mut self, args: &RenderArgs){
-        self.gl.draw(args.viewport(), |c, gl|{
-            clear(BLACK, gl);
-            let transform = c.transform.trans(0.0,0.0).rot_deg(0.0);
-            for enemy in &self.enemies {
-                for pixel in enemy.get_screen_segments() {
-                    let printable_segment = rectangle::square(pixel.x as f64, pixel.y as f64, 10.0);
-
-                    rectangle(WHITE, printable_segment, transform, gl);
-                }
-            }
-        });
+        self.game_controller.render_objects(&self.gl);
     }
 
     // Logic for updating all objects
     fn update(&mut self, args: &UpdateArgs) {
-        self.score += 1;
-        if self.score % 2 == 0 {
-
-            for i in 0..self.enemies.len() {
-                self.enemies[i].move_object(HorizontalDirection::Right);
-            }
-        }
+        self.game_controller.update_on_game_frame();
     }
 }
 
@@ -77,16 +53,15 @@ fn main(){
 
     let enemy_starting_coords = vec![Coordinate::new(30,0), Coordinate::new(160, 0), Coordinate::new(290, 0), Coordinate::new(420, 0), Coordinate::new(550, 0), Coordinate::new(30, 100), Coordinate::new(160, 100), Coordinate::new(290, 100), Coordinate::new(420, 100), Coordinate::new(550, 100), Coordinate::new(30, 200), Coordinate::new(160, 200), Coordinate::new(290, 200), Coordinate::new(420, 200), Coordinate::new(550, 200)];
 
-    let sprite_factory = SpriteFactory { game_scale : GAME_SCALE };
-    let enemies = sprite_factory.get_basic_enemies(enemy_starting_coords, WINDOW_X);
-    //let player = sprite_factory.get_player(Coordinate::new(WINDOW_X as i32 / 2, WINDOW_Y as i32 - 20));
+    let sprite_factory = SpriteFactory::new(GAME_SCALE,  WINDOW_X as i32);
+    let enemies = sprite_factory.get_basic_enemies(enemy_starting_coords, WHITE);
+    let player = sprite_factory.get_player(Coordinate::new(WINDOW_X as i32 / 2, WINDOW_Y as i32 - 20));
+
+    let controller = GameController();
 
     let mut app = App {
         gl: GlGraphics::new(open_gl),
-        score: 0,
-        direction: HorizontalDirection::Right,
-        game_state: GameState::InProgress,
-        enemies: enemies,
+        game_controller: controller,
     };
 
     let event_settings = EventSettings::new().ups(15);
@@ -108,13 +83,16 @@ fn main(){
             
         }
 
-        if let app.game_state == GameState::Lost {
-            println!("Game over buster. Your score is: {}", app.score);
-            return;
-        }
-        if let app.game_state == GameState::Won {
-            println!("Game over... You won!! Your score is: {}", app.score);
-            return;
+        match app.game_controller.get_game_state() {
+            GameState::Lost => {
+                println!("Game over buster. Your score is: {}", app.game_controller.score);
+                return;
+            },
+            GameState::Won => {
+                println!("Game over... You won!! Your score is: {}", app.game_controller.score);
+                return;
+            },
+            _ => continue
         }
     }
 }

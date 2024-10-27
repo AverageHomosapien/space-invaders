@@ -1,16 +1,18 @@
 use crate::game_objects::coordinate::Coordinate;
 use crate::sprites::sprites::{Sprite, EnemySprite};
 use crate::game_objects::direction::{HorizontalDirection, VerticalDirection};
+use crate::game_objects::colors::{WHITE, BLACK};
 
 pub struct BasicEnemy {
     game_scale: i32,
     current_location: Coordinate,
     screen_segments: Vec<Coordinate>,
-    max_window_x_size: u32,
+    max_window_x_size: i32,
+    color: colors,
 }
 
 impl BasicEnemy {
-    pub fn new(game_scale: i32, current_location: Coordinate, max_window_x_size:u32) -> Self {
+    pub fn new(game_scale: i32, current_location: Coordinate, color:color, max_window_x_size:i32) -> Self {
         Self { game_scale: game_scale,
                max_window_x_size: max_window_x_size,
                screen_segments: 
@@ -41,7 +43,7 @@ impl BasicEnemy {
             Coordinate::new(game_scale * 2 + &current_location.x, game_scale * 7 + &current_location.y), Coordinate::new(game_scale * 3 + &current_location.x, game_scale * 7 + &current_location.y),
                 Coordinate::new(game_scale * 7 + &current_location.x, game_scale * 7 + &current_location.y), Coordinate::new(game_scale * 8 + &current_location.x, game_scale * 7 + &current_location.y)],
             current_location: current_location,
-
+            color: color
         }
     }
 }
@@ -61,11 +63,11 @@ impl Sprite for BasicEnemy {
         }
     }
 
-    fn touching_horizontal_screen_edge(&self, right_edge: i32) -> HorizontalDirection {
+    fn touching_horizontal_screen_edge(&self) -> HorizontalDirection {
         if self.screen_segments.iter().any(|elem| elem.y <= 0) {
             return HorizontalDirection::Left;
         }
-        else if self.screen_segments.iter().any(|elem| elem.y >= right_edge) {
+        else if self.screen_segments.iter().any(|elem| elem.y >= max_window_x_size) {
             return HorizontalDirection::Right;
         }
         return HorizontalDirection::Neither;
