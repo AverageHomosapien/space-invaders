@@ -30,7 +30,7 @@ pub trait Projectile {
 }
 
 impl Projectile for Bullet {
-    fn move_object(mut self) {
+    fn move_object(&mut self) {
         for i in 0..self.screen_segments.len() {
             self.screen_segments[i].y += (self.direction as i32) * 5;
         }
@@ -42,9 +42,9 @@ impl Projectile for Bullet {
 
     fn colliding_with_index(&self, coordinates: Vec<Coordinate>) -> Option<i32> {
         for i in 0..coordinates.len() {
-            for j in 0..self.screen_segments {
-                if let coordinates[i].x == self.screen_segments[j].x && coordinates[i].y == self.screen_segments[j].y {
-                    return Some(i);
+            for j in 0..self.screen_segments.len() {
+                if coordinates[i].x == self.screen_segments[j].x && coordinates[i].y == self.screen_segments[j].y {
+                    return Some(i as i32);
                 }
             }
         }
