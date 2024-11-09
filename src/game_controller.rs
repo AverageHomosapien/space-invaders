@@ -8,7 +8,7 @@ struct GameController {
     player: Vec<Player>,
 }
 
-pub trait GameManagement [
+pub trait GameManagement {
     fn update_on_game_frame();
     fn render_objects();
     fn get_game_state();
@@ -43,7 +43,7 @@ impl GameManagement for GameController {
         if !self.enemies.iter().any() {
             GameState::Won
         }
-        else if self.enemies.iter().any(|enemy| enemy.touching_bottom_screen_edge() {
+        else if self.enemies.iter().any(|enemy| enemy.touching_bottom_screen_edge()) {
             GameState::Lost
         }
         else {
@@ -57,5 +57,5 @@ impl GameManagement for GameController {
 }
 
 impl GameController {
-    pub fn new(
+    pub fn new()
 }

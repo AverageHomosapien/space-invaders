@@ -2,7 +2,6 @@ use crate::game_objects::coordinate::Coordinate;
 use crate::sprites::enemies::BasicEnemy;
 use crate::sprites::player::Player;
 use crate::sprites::sprites::Sprite;
-use crate::game_objects::colors::{WHITE, BLACK};
 
 pub struct SpriteFactory {
     pub game_scale: i32,
@@ -10,19 +9,19 @@ pub struct SpriteFactory {
 }
 
 pub trait EnemyFactory {
-    fn get_basic_enemy(&self, coordinate: Coordinate, color: color) -> BasicEnemy;
-    fn get_basic_enemies(&self, coordinates: Vec<Coordinate>, color: color) -> Vec<BasicEnemy>;
+    fn get_basic_enemy(&self, coordinate: Coordinate) -> BasicEnemy;
+    fn get_basic_enemies(&self, coordinates: Vec<Coordinate>) -> Vec<BasicEnemy>;
 }
 
 impl EnemyFactory for SpriteFactory {
-    fn get_basic_enemy(&self, coordinate: Coordinate, color: color) -> BasicEnemy {
-        BasicEnemy::new(self.game_scale, coordinate, color, self.maximum_window_x_size)
+    fn get_basic_enemy(&self, coordinate: Coordinate) -> BasicEnemy {
+        BasicEnemy::new(self.game_scale, coordinate, self.maximum_window_x_size)
     }
 
-    fn get_basic_enemies(&self, coordinates:Vec<Coordinate>, color:color) -> Vec<BasicEnemy> {
+    fn get_basic_enemies(&self, coordinates:Vec<Coordinate>) -> Vec<BasicEnemy> {
         let mut enemies: Vec<BasicEnemy> = vec![];
         for coord in coordinates {
-            enemies.push(BasicEnemy::new(self.game_scale, coord, color, self.maximum_window_x_size));
+            enemies.push(BasicEnemy::new(self.game_scale, coord, self.maximum_window_x_size));
         }
         return enemies;
     }

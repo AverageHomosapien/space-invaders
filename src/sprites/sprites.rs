@@ -2,9 +2,9 @@ use crate::game_objects::coordinate::Coordinate;
 use crate::game_objects::direction::{HorizontalDirection, VerticalDirection};
 
 pub trait Bullet {
-    fn move_object(&mut self, direction: VerticalDirection);
+    fn move_object(&mut self);
     fn get_screen_segments(&self) -> &Vec<Coordinate>;
-    fn colliding_with_index(&self, coordinates: Vec<Coordinate>) -> Some(i32);
+    fn colliding_with_index(&self, coordinates: Vec<Coordinate>) -> Option<i32>;
 }
 
 pub trait Sprite {

@@ -31,21 +31,20 @@ impl Sprite for Player {
     }
 
     fn move_object(&mut self, direction: HorizontalDirection) {
-        if let direction != HorizontalDirection::Neither 
-            && direction != self.touching_horizontal_screen_edge() {
+        if let direction != HorizontalDirection::Neither && direction != self.touching_horizontal_screen_edge() {
             for i in 0..self.screen_segments.len() {
                 self.screen_segments[i].x += (direction as i32) * 5;
             }
         }
     }
 
-    fn touching_horizontal_screen_edge(&self) -> HorizontalDirection {
+    fn touching_horizontal_screen_edge(&self) -> Option<HorizontalDirection> {
         if self.screen_segments.iter().any(|elem| elem.y <= 0) {
-            return HorizontalDirection::Left;
+            return Some(HorizontalDirection::Left);
         }
-        else if self.screen_segments.iter().any(|elem| elem.y >= max_window_x_size) {
-            return HorizontalDirection::Right;
+        else if self.screen_segments.iter().any(|elem| elem.y >= self.max_window_x_size) {
+            return Some(HorizontalDirection::Right);
         }
-        return HorizontalDirection::Neither;
+        return None;
     }
 }
